@@ -2,6 +2,7 @@
 <meta charset="utf8" />
 <link rel="icon" href="/static/favicon.ico" />
 <link rel="stylesheet" href="/static/main.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans">
 <html>
   <head>
     <title>Assignments - CS 3550</title>
@@ -10,22 +11,24 @@
   <body>
     <!-- navigation bar -->
     <nav>
-      <strong>CS 3550</strong>
+      <span>CS 3550</span>
       <a href="/static/index.html">Assignments</a>
       <a href="/static/profile.html">Profile</a>
     </nav>
     <!-- main page -->
     <main>
-      <h2>All assignments</h2>
+      <span class="pageTitle">All assignments</span>
       <hr />
 
       <!-- Assignments table -->
       <table>
-        <tr>
-          <th>Assignment</th>
-          <th>Due Date</th>
-          <th>Weight</th>
-        </tr>
+        <thead>
+          <tr>
+            <th>Assignment</th>
+            <th>Due Date</th>
+            <th>Weight</th>
+          </tr>
+        </thead>
         <tr>
           <td><a href="#">Github username</a></td>
           <td>Aug 01</td>

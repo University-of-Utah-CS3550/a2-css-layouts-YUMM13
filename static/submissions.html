@@ -2,6 +2,7 @@
 <meta charset="utf8" />
 <link rel="icon" href="/static/favicon.ico">
 <link rel="stylesheet" href="/static/main.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans">
 <html>
   <head>
     <title>Submissions - CS 3550</title>
@@ -9,23 +10,25 @@
   <body>
     <!-- navigation bar -->
     <nav>
-        <strong>CS 3550</strong>
+        <span>CS 3550</span>
         <a href="/static/index.html">Assignments</a>
         <a href="/static/profile.html">Profile</a>
     </nav>
     <!-- main page -->
     <main>
-        <h2>Homework 1 (HTML)</h2>
+        <span class="pageTitle">Homework 1 (HTML)</span>
         <hr>
-        <s2>All grades out of 100</s2>
+        All grades out of 100
 
         <!-- student submissions table -->
         <table>
-            <tr>
+            <thead>
+              <tr>
                 <th>Student</th>
                 <th>Submission</th>
                 <th>Grade</th>
-            </tr>
+              </tr>
+            </thead>
             <tr>
                 <label for="s1Grade"><td>s1</td></label>
                 <td><a href="#" title="View Submission">Submission</a></td>

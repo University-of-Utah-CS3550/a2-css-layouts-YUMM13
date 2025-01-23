@@ -2,6 +2,7 @@
 <meta charset="utf8" />
 <link rel="icon" href="/static/favicon.ico" />
 <link rel="stylesheet" href="/static/main.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans">
 <html>
   <head>
     <title>Profile - CS 3550</title>
@@ -9,13 +10,13 @@
   <body>
     <!-- navigation bar -->
     <nav>
-      <strong>CS 3550</strong>
+      <span>CS 3550</span>
       <a href="/static/index.html">Assignments</a>
       <a href="/static/profile.html">Profile</a>
     </nav>
     <!-- main page -->
     <main>
-      <h2>Your Grades</h2>
+      <span class="pageTitle">Your Grades</span>
       <hr />
 
       <!-- popout box for who is logged in -->
@@ -23,10 +24,12 @@
 
       <!-- Graded assignmetns table -->
       <table>
-        <tr>
-          <th>Assignment</th>
-          <th>Graded</th>
-        </tr>
+        <thead>
+          <tr>
+            <th>Assignment</th>
+            <th>Graded</th>
+          </tr>
+        </thead>
         <tr>
           <td><a href="#" title="Go to Github Username page">Github Username</a></td>
           <td>2/3</td>

@@ -1,1 +1,19 @@
-* { color: yellow; }
+/* Phase 2 rules */
+* { 
+    font-family: "IBM Plex Sans";
+    line-height: 1.25rem; 
+  }
+
+code { font-family: "IBM Plex Mono"; }
+
+table { line-height: 1.5rem; }
+
+nav { font-size: 1.25rem; }
+
+nav a { color: darkgray; }
+
+nav span { font-weight: bold; }
+
+.pageTitle { font-size: 1.50em;}
+
+.login { font-size: 1.25em;}

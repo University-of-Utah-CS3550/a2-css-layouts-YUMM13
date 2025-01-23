@@ -2,6 +2,7 @@
 <meta charset="utf8" />
 <link rel="icon" href="/static/favicon.ico" />
 <link rel="stylesheet" href="/static/main.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans">
 <html>
   <head>
     <title>Login - CS 3550</title>
@@ -9,19 +10,18 @@
   <body>
     <!-- navigation bar -->
     <nav>
-      <strong>CS 3550</strong>
+      <span>CS 3550</span>
       <a href="/static/index.html">Assignments</a>
       <a href="/static/profile.html">Profile</a>
     </nav>
     <!-- main page -->
     <main>
-      <h2>Log in</h2>
-      <hr />
+      <span class="pageTitle">Log in</span>
       <form>
-        <label for="username" autofocus >Username: <input id="username" /></label>
-        <label for="password" >Password: <input id="password" /></label>
+        <label class="login" for="username" autofocus >Username: <input class="login" id="username" /></label>
+        <label class="login" for="password" >Password: <input class="login" id="password" /></label>
       </form>
-      <button id="submit">Submit</button>
+      <button class="login" id="submit">Submit</button>
     </main>
   </body>
 </html>
