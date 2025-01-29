@@ -6,14 +6,47 @@
 
 code { font-family: "IBM Plex Mono"; }
 
-table { line-height: 1.5rem; }
+table { 
+    line-height: 1.5rem; 
+    /* phase 3 rules */
+    width: 100%;
+    text-align: left;
+}
 
-nav { font-size: 1.25rem; }
-
-nav a { color: darkgray; }
-
-nav span { font-weight: bold; }
+nav { 
+    font-size: 1.25rem; 
+    a { 
+        color: darkgray;
+        text-decoration: none;
+    }
+    a:hover { 
+        text-decoration: underline; 
+    }
+    span { 
+        font-weight: bold; 
+    }
+}    
 
 .pageTitle { font-size: 1.50em;}
 
 .login { font-size: 1.25em;}
+
+/* phase 3 rules */
+.tableNum {
+    text-align: right;
+}
+
+.loginDiv {
+    display: flex;
+    flex-direction: column;
+    button {
+        justify-content: center;
+        width: 50%;
+    }
+}
+
+.loginForm {
+    padding: 1rem;
+    width: 50%;
+    flex-direction: row;
+}

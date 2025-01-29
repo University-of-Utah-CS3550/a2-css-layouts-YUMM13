@@ -1,64 +1,89 @@
 <!DOCTYPE html>
-<meta charset="utf8" />
-<link rel="icon" href="/static/favicon.ico" />
-<link rel="stylesheet" href="/static/main.css" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans">
-<html>
-  <head>
-    <title>Profile - CS 3550</title>
-  </head>
-  <body>
-    <!-- navigation bar -->
-    <nav>
-      <span>CS 3550</span>
-      <a href="/static/index.html">Assignments</a>
-      <a href="/static/profile.html">Profile</a>
-    </nav>
-    <!-- main page -->
-    <main>
-      <span class="pageTitle">Your Grades</span>
-      <hr />
+<head>
+  <title>Profile - CS 3550</title>
 
-      <!-- popout box for who is logged in -->
-      <aside>Currently logged in as ta1 <a href="#" role="button">Log out</a></aside>
+  <!-- meta and link tags -->
+  <meta charset="utf8" />
+  <link rel="icon" href="/static/favicon.ico" />
+  <link rel="stylesheet" href="/static/main.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans"
+  />
 
-      <!-- Graded assignmetns table -->
-      <table>
-        <thead>
-          <tr>
-            <th>Assignment</th>
-            <th>Graded</th>
-          </tr>
-        </thead>
-        <tr>
-          <td><a href="#" title="Go to Github Username page">Github Username</a></td>
-          <td>2/3</td>
-        </tr>
-        <tr>
-          <td><a href="/static/assignment.html" title="Go to Homework 1 (HTML) page">Homework 1 (HTML)</a></td>
-          <td>1/2</td>
-        </tr>
-        <tr>
-          <td><a href="#" title="Go to Homework 2 (CSS) page">Homework 2 (CSS)</a></td>
-          <td>0/1</td>
-        </tr>
-        <tr>
-          <td><a href="#" title="Go to Homework 3 (Backend) page">Homework 3 (Backend)</a></td>
-          <td>0/0</td>
-        </tr>
-        <tr>
-          <td><a href="#" title="Go to Homework 4 (Deploy) page">Homework 4 (Deploy)</a></td>
-          <td>0/0</td>
-        </tr>
-        <tr>
-          <td><a href="#" title="Go to Homework 5 (Permissions) page">Homework 5 (Permissions)</a></td>
-          <td>0/0</td>
-        </tr>
-        <tr>
-          <td><a href="#" title="Go to Homework 6 (JS) page">Homework 6 (JS)</a></td>
-          <td>0/0</td>
-        </tr>
-      </table>
-    </main>
-  </body>
-</html>
+  <!-- navigation bar -->
+  <nav>
+    <span>CS 3550</span>
+    <a href="index.html">Assignments</a>
+    <a href="profile.html">Profile</a>
+  </nav>
+</head>
+<!-- main page -->
+<main>
+  <span class="pageTitle">Your Grades</span> class="tableNum"
+  <hr />
+
+  <!-- popout box for who is logged in -->
+  <aside>
+    Currently logged in as ta1 <a href="#" role="button">Log out</a>
+  </aside>
+
+  <!-- Graded assignmetns table -->
+  <table>
+    <thead>
+      <tr>
+        <th>Assignment</th>
+        <th class="tableNum">Graded</th>
+      </tr>
+    </thead>
+    <tr>
+      <td>
+        <a href="#" title="Go to Github Username page">Github Username</a>
+      </td>
+      <td class="tableNum">2/3</td>
+    </tr>
+    <tr>
+      <td>
+        <a href="assignment.html" title="Go to Homework 1 (HTML) page"
+          >Homework 1 (HTML)</a
+        >
+      </td>
+      <td class="tableNum">1/2</td>
+    </tr>
+    <tr>
+      <td>
+        <a href="#" title="Go to Homework 2 (CSS) page">Homework 2 (CSS)</a>
+      </td>
+      <td class="tableNum">0/1</td>
+    </tr>
+    <tr>
+      <td>
+        <a href="#" title="Go to Homework 3 (Backend) page"
+          >Homework 3 (Backend)</a
+        >
+      </td>
+      <td class="tableNum">0/0</td>
+    </tr>
+    <tr>
+      <td>
+        <a href="#" title="Go to Homework 4 (Deploy) page"
+          >Homework 4 (Deploy)</a
+        >
+      </td>
+      <td class="tableNum">0/0</td>
+    </tr>
+    <tr>
+      <td>
+        <a href="#" title="Go to Homework 5 (Permissions) page"
+          >Homework 5 (Permissions)</a
+        >
+      </td>
+      <td class="tableNum">0/0</td>
+    <tr>
+      <td>
+        <a href="#" title="Go to Homework 6 (JS) page">Homework 6 (JS)</a>
+      </td>
+      <td class="tableNum">0/0</td>
+    </tr>
+  </table>
+</main>

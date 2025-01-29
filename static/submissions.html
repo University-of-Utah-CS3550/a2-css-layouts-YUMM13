@@ -1,57 +1,55 @@
 <!DOCTYPE html>
-<meta charset="utf8" />
-<link rel="icon" href="/static/favicon.ico">
-<link rel="stylesheet" href="/static/main.css" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans">
-<html>
-  <head>
-    <title>Submissions - CS 3550</title>
-  </head>
-  <body>
-    <!-- navigation bar -->
-    <nav>
-        <span>CS 3550</span>
-        <a href="/static/index.html">Assignments</a>
-        <a href="/static/profile.html">Profile</a>
-    </nav>
-    <!-- main page -->
-    <main>
-        <span class="pageTitle">Homework 1 (HTML)</span>
-        <hr>
-        All grades out of 100
+<head>
+  <title>Submissions - CS 3550</title>
 
-        <!-- student submissions table -->
-        <table>
-            <thead>
-              <tr>
-                <th>Student</th>
-                <th>Submission</th>
-                <th>Grade</th>
-              </tr>
-            </thead>
-            <tr>
-                <label for="s1Grade"><td>s1</td></label>
-                <td><a href="#" title="View Submission">Submission</a></td>
-                <td>
-                  <form>
-                    <input type="number" id="s1Grade">
-                  </form>
-                </td>
-            </tr>
-            <tr>
-                <label for="s2Grade"><td>s2</td></label>
-                <td><a href="#" title="View Submission">Submission</a></td>
-                <td>
-                  <form>
-                    <input type="number" id="s2Grade">
-                  </form>
-                </td>
-            </tr>
-          </table>
-          <form>
-            <button id="submit">Submit</button>
-            <a href="/static/index.html">Back to assignment</a>
-          </form>
-    </main>
-  </body>
-</html>
+  <!-- meta and link tags -->
+  <meta charset="utf8" />
+  <link rel="icon" href="/static/favicon.ico" />
+  <link rel="stylesheet" href="/static/main.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans"
+  />
+
+  <!-- navigation bar -->
+  <nav>
+    <span>CS 3550</span>
+    <a href="index.html">Assignments</a>
+    <a href="profile.html">Profile</a>
+  </nav>
+</head>
+<!-- main page -->
+<main>
+  <span class="pageTitle">Homework 1 (HTML)</span>
+  <hr />
+  All grades out of 100
+
+  <!-- student submissions table -->
+  <form>
+    <table>
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Submission</th>
+          <th>Grade</th>
+        </tr>
+      </thead>
+      <tr>
+        <label for="s1Grade"><td>s1</td></label>
+        <td><a href="#" title="View Submission">Submission</a></td>
+        <td>
+          <input type="number" id="s1Grade" />
+        </td>
+      </tr>
+      <tr>
+        <label for="s2Grade"><td>s2</td></label>
+        <td><a href="#" title="View Submission">Submission</a></td>
+        <td>
+          <input type="number" id="s2Grade" />
+        </td>
+      </tr>
+    </table>
+    <button id="submit">Submit</button>
+    <a href="assignment.html">Back to assignment</a>
+  </form>
+</main>

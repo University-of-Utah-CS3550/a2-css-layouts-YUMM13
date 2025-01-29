@@ -1,27 +1,39 @@
 <!DOCTYPE html>
-<meta charset="utf8" />
-<link rel="icon" href="/static/favicon.ico" />
-<link rel="stylesheet" href="/static/main.css" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans">
-<html>
-  <head>
-    <title>Login - CS 3550</title>
-  </head>
-  <body>
-    <!-- navigation bar -->
-    <nav>
-      <span>CS 3550</span>
-      <a href="/static/index.html">Assignments</a>
-      <a href="/static/profile.html">Profile</a>
-    </nav>
-    <!-- main page -->
-    <main>
-      <span class="pageTitle">Log in</span>
-      <form>
-        <label class="login" for="username" autofocus >Username: <input class="login" id="username" /></label>
-        <label class="login" for="password" >Password: <input class="login" id="password" /></label>
-      </form>
-      <button class="login" id="submit">Submit</button>
-    </main>
-  </body>
-</html>
+<head>
+  <title>Login - CS 3550</title>
+
+  <!-- meta and link tags -->
+  <meta charset="utf8" />
+  <link rel="icon" href="/static/favicon.ico" />
+  <link rel="stylesheet" href="/static/main.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans"
+  />
+
+  <!-- navigation bar -->
+  <nav>
+    <span>CS 3550</span>
+    <a href="index.html">Assignments</a>
+    <a href="profile.html">Profile</a>
+  </nav>
+</head>
+<!-- main page -->
+<main>
+  <span class="pageTitle">Log in</span>
+  <div class="loginDiv">
+    <form>
+      <div class="loginForm">
+        <label class="login" for="username" autofocus
+          >Username: <input class="login" id="username"
+        /></label>
+      </div>
+      <div class="loginForm">
+        <label class="login" for="password"
+          >Password: <input class="login" id="password"
+        /></label>
+      </div>
+      <button class="login">Submit</button>
+    </form>
+  </div>
+</main>
