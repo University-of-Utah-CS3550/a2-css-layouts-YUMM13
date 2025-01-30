@@ -15,8 +15,14 @@ table {
 
 nav { 
     font-size: 1.25rem; 
+    background-color: gray;
+    box-shadow: 0px 0px 5px gray;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
     a { 
-        color: darkgray;
+        color: #444;
         text-decoration: none;
     }
     a:hover { 
@@ -24,10 +30,13 @@ nav {
     }
     span { 
         font-weight: bold; 
+        color: black;
     }
 }    
 
-.pageTitle { font-size: 1.50em;}
+.pageTitle { 
+    font-size: 1.50em;
+}
 
 .login { font-size: 1.25em;}
 
@@ -49,4 +58,27 @@ nav {
     padding: 1rem;
     width: 50%;
     flex-direction: row;
+}
+
+aside {
+    border: 3px solid #204a87;
+    background-color: #b1c3de;
+    padding: 5px;
+    a {
+        float: right;
+    }
+}
+
+main {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+}
+
+.horizonalLine {
+    width: 100%; /* Full width */
+    height: 1px; /* Thickness */
+    background-color: gray; /* Color */
+    margin: .5rem 0; /* Vertical spacing */
 }
