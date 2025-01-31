@@ -10,46 +10,62 @@
     rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans"
   />
-
-  <!-- navigation bar -->
-  <nav>
-    <span>CS 3550</span>
-    <a href="index.html">Assignments</a>
-    <a href="profile.html">Profile</a>
-  </nav>
 </head>
-<!-- main page -->
-<main>
-  <span class="pageTitle">Homework 1 (HTML)</span>
-  <div class="horizonalLine"></div>
-  All grades out of 100
 
-  <!-- student submissions table -->
-  <form>
-    <table>
-      <thead>
-        <tr>
-          <th>Student</th>
-          <th>Submission</th>
-          <th>Grade</th>
-        </tr>
-      </thead>
-      <tr>
-        <label for="s1Grade"><td>s1</td></label>
-        <td><a href="#" title="View Submission">Submission</a></td>
-        <td>
-          <input type="number" id="s1Grade" />
-        </td>
-      </tr>
-      <tr>
-        <label for="s2Grade"><td>s2</td></label>
-        <td><a href="#" title="View Submission">Submission</a></td>
-        <td>
-          <input type="number" id="s2Grade" />
-        </td>
-      </tr>
-    </table>
-    <button id="submit">Submit</button>
-    <a href="assignment.html">Back to assignment</a>
-  </form>
-</main>
+<div class="Container">
+  <!-- page header -->
+  <header>
+    <!-- navigation bar -->
+    <nav>
+      <div class="NavContainer">
+        <div class="NavDiv">
+          <span>CS 3550</span>
+          <a href="index.html">Assignments</a>
+        </div>
+        <a href="profile.html">Profile</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- main page -->
+  <main>
+    <div>
+      <span class="pageTitle">Homework 1 (HTML)</span>
+      <div class="horizonalLine"></div>
+      All grades out of 100
+    </div>
+
+    <!-- student submissions table -->
+    <form>
+      <div class="submissionsDiv">
+        <table>
+        <thead>
+            <tr>
+              <th>Student</th>
+              <th>Submission</th>
+              <th>Grade</th>
+            </tr>
+          </thead>
+          <tr>
+            <label for="s1Grade"><td>s1</td></label>
+            <td><a href="#" title="View Submission">Submission</a></td>
+            <td>
+              <input type="number" id="s1Grade" />
+            </td>
+          </tr>
+          <tr>
+            <label for="s2Grade"><td>s2</td></label>
+            <td><a href="#" title="View Submission">Submission</a></td>
+            <td>
+              <input type="number" id="s2Grade" />
+            </td>
+          </tr>
+        </table>
+        <div>
+          <button id="submit">Submit</button>
+          <a href="assignment.html">Back to assignment</a>
+        </div>
+      </div>
+    </form>
+  </main>
+</div>

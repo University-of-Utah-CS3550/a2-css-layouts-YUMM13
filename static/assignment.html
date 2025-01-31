@@ -14,41 +14,55 @@
     rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono"
   />
-
-  <!-- navigation bar -->
-  <nav>
-    <span>CS 3550</span>
-    <a href="index.html">Assignments</a>
-    <a href="profile.html">Profile</a>
-  </nav>
 </head>
-<!-- main page -->
-<main>
-  <span class="pageTitle">Homework 1 (HTML)</span>
-  <div class="horizonalLine"></div>
-  Due September 08, total of 100 points
 
-  <!-- submissions box -->
-  <aside>
-    <p>Currently 2/3 submissions</p>
-    <p>
-      1 submission assigned to you <a href="submissions.html">Grade</a>
-    </p>
-  </aside>
+<div class="Container">
+  <!-- page header -->
+  <header>
+    <!-- navigation bar -->
+    <nav>
+      <div class="NavContainer">
+        <div class="NavDiv">
+          <span>CS 3550</span>
+          <a href="index.html">Assignments</a>
+        </div>
+        <a href="profile.html">Profile</a>
+      </div>
+    </nav>
+  </header>
 
-  <!-- description -->
-  <h4>Description</h4>
-  In this assignment you will set up a web server serving HTML pages for the
-  grading application:
-  <ul>
-    <li>Configure and start a <em>basic web server</em> using Django</li>
-    <li>Create <em>basic web pages</em> using HTML for data/content</li>
-  </ul>
-  For example, here is a web page <strong>you will make,</strong> in a file
-  called <code>assignments.html</code>:
-
-  <img
-    src="/static/assignments.png"
-    alt="an image of the assignments page. The page includes a list of all assignments, their due dates, and thier weights. "
-  />
+  <!-- main page -->
+  <main>
+    <div>
+      <span class="pageTitle">Homework 1 (HTML)</span>
+      <div class="horizonalLine"></div>
+      Due September 08, total of 100 points
+    </div>
+  
+    <!-- submissions box -->
+    <aside>
+      <p>Currently 2/3 submissions</p>
+      <p>
+        1 submission assigned to you <a href="submissions.html">Grade</a>
+      </p>
+    </aside>
+  
+    <!-- description -->
+    <h4>Description</h4>
+    In this assignment you will set up a web server serving HTML pages for the
+    grading application:
+    <ul>
+      <li>Configure and start a <em>basic web server</em> using Django</li>
+      <li>Create <em>basic web pages</em> using HTML for data/content</li>
+    </ul>
+    <div>
+      For example, here is a web page <strong>you will make,</strong> in a file
+      called <code>assignments.html</code>:
+    </div>
+  
+    <img
+      src="/static/assignments.png"
+      alt="an image of the assignments page. The page includes a list of all assignments, their due dates, and thier weights. "
+    />
+</div>
 </main>

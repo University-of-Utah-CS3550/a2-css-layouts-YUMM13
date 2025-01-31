@@ -10,30 +10,43 @@
     rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans"
   />
-
-  <!-- navigation bar -->
-  <nav>
-    <span>CS 3550</span>
-    <a href="index.html">Assignments</a>
-    <a href="profile.html">Profile</a>
-  </nav>
 </head>
-<!-- main page -->
-<main>
-  <span class="pageTitle">Log in</span>
-  <div class="loginDiv">
+
+<div class="Container">
+  <!-- page header -->
+  <header>
+    <!-- navigation bar -->
+    <nav>
+      <div class="NavContainer">
+        <div class="NavDiv">
+          <span>CS 3550</span>
+          <a href="index.html">Assignments</a>
+        </div>
+        <a href="profile.html">Profile</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- main page -->
+  <main>
+    <div>
+      <span class="pageTitle">Log in</span>
+      <div class="horizonalLine"></div>
+    </div>
     <form>
-      <div class="loginForm">
-        <label class="login" for="username" autofocus
-          >Username: <input class="login" id="username"
-        /></label>
+      <div class="loginContainer">
+        <div class="inputGroup">
+          <label class="loginText" for="username" autofocus>Username: </label>
+          <input class="loginText" id="username" />
+        </div>
+        <div class="inputGroup">
+          <label class="loginText" for="password">Password: </label>
+          <input class="loginText" id="password" />
+        </div>
+        <div class="loginButton">
+          <button class="loginText">Log In</button>
+        </div>
       </div>
-      <div class="loginForm">
-        <label class="login" for="password"
-          >Password: <input class="login" id="password"
-        /></label>
-      </div>
-      <button class="login">Submit</button>
     </form>
-  </div>
-</main>
+  </main>
+</div>

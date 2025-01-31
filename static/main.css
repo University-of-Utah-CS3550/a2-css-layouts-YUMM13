@@ -1,26 +1,53 @@
 /* Phase 2 rules */
+/* controls font */
 * { 
     font-family: "IBM Plex Sans";
-    line-height: 1.25rem; 
-  }
+    line-height: 1.25; 
+    code { 
+        font-family: "IBM Plex Mono"; 
+    }
+}
 
-code { font-family: "IBM Plex Mono"; }
-
+/* table css */
 table { 
-    line-height: 1.5rem; 
+    line-height: 1.5; 
     /* phase 3 rules */
     width: 100%;
     text-align: left;
 }
 
+/* centers all elements */
+.Container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+}
+
+/* css for main content */
+main {
+    display: flex;
+    flex-direction: column;
+    max-width: 50rem;
+    width: 100%;
+    padding: .5rem 1rem .5rem 1rem;
+    gap: 1rem;
+}
+
+/* has the header span the page up to 50rem */
+header {
+    max-width: 50rem;
+    width: 100%;
+}
+
+/* navigation bar css */
 nav { 
     font-size: 1.25rem; 
-    background-color: gray;
-    box-shadow: 0px 0px 5px gray;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: .5rem;
-    padding-bottom: .5rem;
+    background-color: #ddd;
+    box-shadow: 0px 0px 5px #ddd;
+    padding: .5rem 1rem .5rem 1rem;
+
+    /* links in nav bar */
     a { 
         color: #444;
         text-decoration: none;
@@ -28,57 +55,93 @@ nav {
     a:hover { 
         text-decoration: underline; 
     }
+
+    /* Text in nav bar (CS 3550) */
     span { 
         font-weight: bold; 
         color: black;
     }
-}    
+}
 
+/* div in nav bar that groups the CS 3550 text and Assignments link */
+.NavDiv {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+/* div that contains the entire nav bar to space elements correctly */
+.NavContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 50rem;
+}
+
+/* adjusts the page title */
 .pageTitle { 
     font-size: 1.50em;
+    font-weight: bold;
 }
 
-.login { font-size: 1.25em;}
-
-/* phase 3 rules */
-.tableNum {
-    text-align: right;
+/* text on login page */
+.loginText { 
+    font-size: 1.25em;
 }
 
-.loginDiv {
+/* div in login that groups the inputs, labels, and login button */
+.loginContainer {
     display: flex;
     flex-direction: column;
-    button {
-        justify-content: center;
+    gap: 1rem;
+}
+
+/* groups a label with its corresponding input */
+.inputGroup {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    input {
         width: 50%;
     }
 }
 
-.loginForm {
-    padding: 1rem;
-    width: 50%;
+/* div for the login button */
+.loginButton {
+    display: flex;
     flex-direction: row;
+    justify-content: center;
+    button {
+        width: 50%;
+    }
 }
 
+/* div in submissions that groups the table, submit button and Back To Assignment link */
+.submissionsDiv {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* aligns table entries with numbers to the right side */
+.tableNum {
+    text-align: right;
+}
+
+/* css for the blue boxes on various pages */
 aside {
     border: 3px solid #204a87;
     background-color: #b1c3de;
-    padding: 5px;
+    padding: .5rem 1rem .5rem 1rem;
     a {
         float: right;
     }
 }
 
-main {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: .5rem;
-    padding-bottom: .5rem;
-}
-
+/* the horizontal line that separates the page title and subtitle */
 .horizonalLine {
-    width: 100%; /* Full width */
-    height: 1px; /* Thickness */
-    background-color: gray; /* Color */
-    margin: .5rem 0; /* Vertical spacing */
+    width: 100%;
+    height: 1px;
+    background-color: #ddd;
+    margin: .5rem 0;
 }
