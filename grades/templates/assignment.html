@@ -34,35 +34,26 @@
   <!-- main page -->
   <main>
     <div>
-      <span class="pageTitle">Homework 1 (HTML)</span>
+      <span class="pageTitle">{{assignment.title}}</span>
       <div class="horizonalLine"></div>
-      Due September 08, total of 100 points
+      Due {{assignment.deadline}}, total of {{assignment.points}} {% if assignment.points != 1 %}points{% else %}point{% endif %}
     </div>
   
     <!-- submissions box -->
     <aside>
-      <p>Currently 2/3 submissions</p>
+      <p>Currently {{totalSubmissions}}/{{totalStudents}} {% if totalStudents != 1 %}submissions{% else %}submission{% endif %}</p>
       <p>
-        1 submission assigned to you <a href="submissions.html">Grade</a>
+        {{totalAssigned}} {% if totalAssigned != 1 %}submissions{% else %}submission{% endif %} assigned to you <a href="/{{assignment.id}}/submissions">Grade</a>
       </p>
     </aside>
   
     <!-- description -->
     <h4>Description</h4>
-    In this assignment you will set up a web server serving HTML pages for the
-    grading application:
-    <ul>
-      <li>Configure and start a <em>basic web server</em> using Django</li>
-      <li>Create <em>basic web pages</em> using HTML for data/content</li>
-    </ul>
-    <div>
-      For example, here is a web page <strong>you will make,</strong> in a file
-      called <code>assignments.html</code>:
-    </div>
-  
+    {{assignment.description | safe}}
+    
     <img
-      src="/static/assignments.png"
-      alt="an image of the assignments page. The page includes a list of all assignments, their due dates, and thier weights. "
+    src="/static/assignments.png"
+    alt="an image of the assignments page. The page includes a list of all assignments, their due dates, and thier weights. "
     />
+  </main>
 </div>
-</main>
