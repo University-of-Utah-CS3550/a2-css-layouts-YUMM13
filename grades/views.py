@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Count
 from . import models
 
 # Create your views here.
@@ -8,10 +9,15 @@ def index(request):
     return render(request, "index.html", values)
 
 def assignment(request, assignment_id):
+    # get assignment based on id
     assignment = models.Assignment.objects.get(id=assignment_id)
+
+    # get current user, as of HW3 it is just user g
     currentUser = models.User.objects.get(username="g")
+
+    # get other needed fields
     totalSubmissions = assignment.submission_set.count()
-    totalAssigned = currentUser.graded_set.count()
+    totalAssigned = currentUser.graded_set.filter(assignment=assignment).count()
     totalStudents = models.Group.objects.get(name="Students").user_set.count()
     values = {
         "id": assignment_id,
@@ -26,7 +32,38 @@ def login_form(request):
     return render(request, "login.html")
 
 def profile(request):
-    return render(request, "profile.html")
+    # get all assignments
+    assignments = models.Assignment.objects.all()
+
+    # get current user, as of HW3 it is just user g
+    currentUser = models.User.objects.get(username="g")
+
+    # get the submissions assigned to the current user, turn it into a dictionary
+    assigned = currentUser.graded_set.values("assignment__title").annotate(num_assigned=Count("id"))
+    totalAssigned = {item["assignment__title"]:item["num_assigned"] for item in assigned}
+
+    # get the submissions graded by the current user, turn it into a dictionary
+    graded = currentUser.graded_set.filter(score__isnull=False).values("assignment__title").annotate(num_graded=Count("id"))
+    totalGraded = {item["assignment__title"]:item["num_graded"] for item in graded}
+    values = {
+        "assignments": assignments,
+        "totalAssigned": totalAssigned,
+        "totalGraded": totalGraded,
+    }
+    return render(request, "profile.html", values)
 
 def submissions(request, assignment_id):
-    return render(request, "submissions.html")
+    # get assignment based on id
+    assignment = models.Assignment.objects.get(id=assignment_id)
+
+    # get current user, as of HW3 it is just user g
+    currentUser = models.User.objects.get(username="g")
+
+    # get all submissions for this specific assignment
+    userSubmissions = currentUser.graded_set.filter(assignment=assignment).order_by("author__username").all()
+    values = {
+        "id": assignment_id,
+        "assignment": assignment,
+        "userSubmissions": userSubmissions,
+    }
+    return render(request, "submissions.html", values)

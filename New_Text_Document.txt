@@ -1,6 +1,0 @@
-- explore frameworks that would make our work easier
-  - view could have been different and look better
-  - would make our dev cycle more robust and quick
-- putting API key into frontend is not the most secure
-  - look into how secure we can make it, we may need a db to securely store the keys
-- do some fast-paced work to make RF look really good

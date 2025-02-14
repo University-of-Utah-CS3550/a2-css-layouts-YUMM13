@@ -1,38 +1,13 @@
-<!DOCTYPE html>
-<head>
-  <title>Submissions - CS 3550</title>
-
-  <!-- meta and link tags -->
-  <meta charset="utf8" />
-  <link rel="icon" href="/static/favicon.ico" />
-  <link rel="stylesheet" href="/static/main.css" />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans"
-  />
-</head>
-
 <div class="Container">
   <!-- page header -->
-  <header>
-    <!-- navigation bar -->
-    <nav>
-      <div class="NavContainer">
-        <div class="NavDiv">
-          <span>CS 3550</span>
-          <a href="index.html">Assignments</a>
-        </div>
-        <a href="profile.html">Profile</a>
-      </div>
-    </nav>
-  </header>
+  {% include "header.html" with title="Submissions" %}
 
   <!-- main page -->
   <main>
     <div>
-      <span class="pageTitle">Homework 1 (HTML)</span>
+      <span class="pageTitle">{{assignment.title}}</span>
       <div class="horizonalLine"></div>
-      All grades out of 100
+      All grades out of {{assignment.weight}}
     </div>
 
     <!-- student submissions table -->
@@ -46,24 +21,19 @@
               <th>Grade</th>
             </tr>
           </thead>
+          {% for subs in userSubmissions %}
           <tr>
-            <label for="s1Grade"><td>s1</td></label>
-            <td><a href="#" title="View Submission">Submission</a></td>
+            <label for="s1Grade"><td>{{subs.author.get_full_name}}</td></label>
+            <td><a href="{{subs.file}}" title="View Submission">Submission</a></td>
             <td>
-              <input type="number" id="s1Grade" />
+              <input type="number" id="s1Grade" value="{{subs.score}}"/>
             </td>
           </tr>
-          <tr>
-            <label for="s2Grade"><td>s2</td></label>
-            <td><a href="#" title="View Submission">Submission</a></td>
-            <td>
-              <input type="number" id="s2Grade" />
-            </td>
-          </tr>
+          {% endfor %}
         </table>
         <div>
           <button id="submit">Submit</button>
-          <a href="assignment.html">Back to assignment</a>
+          <a href="/{{id}}/">Back to assignment</a>
         </div>
       </div>
     </form>

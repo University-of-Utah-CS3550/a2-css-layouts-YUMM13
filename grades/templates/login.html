@@ -1,31 +1,6 @@
-<!DOCTYPE html>
-<head>
-  <title>Login - CS 3550</title>
-
-  <!-- meta and link tags -->
-  <meta charset="utf8" />
-  <link rel="icon" href="/static/favicon.ico" />
-  <link rel="stylesheet" href="/static/main.css" />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans"
-  />
-</head>
-
 <div class="Container">
   <!-- page header -->
-  <header>
-    <!-- navigation bar -->
-    <nav>
-      <div class="NavContainer">
-        <div class="NavDiv">
-          <span>CS 3550</span>
-          <a href="index.html">Assignments</a>
-        </div>
-        <a href="profile.html">Profile</a>
-      </div>
-    </nav>
-  </header>
+  {% include "header.html" with title="Login" %}
 
   <!-- main page -->
   <main>
