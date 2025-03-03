@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.db.models import Count
 from . import models
 
@@ -53,6 +53,10 @@ def profile(request):
     return render(request, "profile.html", values)
 
 def submissions(request, assignment_id):
+    # redirect for post requests
+    if request.method == "POST":
+        return redirect(f"/{assignment_id}/submissions/")
+    
     # get assignment based on id
     assignment = models.Assignment.objects.get(id=assignment_id)
 
