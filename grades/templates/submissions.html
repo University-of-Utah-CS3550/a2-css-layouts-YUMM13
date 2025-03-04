@@ -24,10 +24,10 @@
           </thead>
           {% for subs in userSubmissions %}
           <tr>
-            <label for="s1Grade"><td>{{subs.author.get_full_name}}</td></label>
+            <label for="grade-{{id}}"><td>{{subs.author.get_full_name}}</td></label>
             <td><a href="{{subs.file}}" title="View Submission">Submission</a></td>
             <td>
-              <input type="number" id="s1Grade" value="{{subs.score}}"/>
+              <input type="number" id="grade-{{id}}" value="{{subs.score}}"/>
             </td>
           </tr>
           {% endfor %}

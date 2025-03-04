@@ -1,3 +1,4 @@
+from decimal import Decimal, ROUND_DOWN
 from django.shortcuts import redirect, render
 from django.db.models import Count
 from . import models
@@ -55,6 +56,25 @@ def profile(request):
 def submissions(request, assignment_id):
     # redirect for post requests
     if request.method == "POST":
+        updated_submissions = []
+        for key in request.POST:
+            # skip if it is not a grade input
+            if "grade-" not in key:
+                continue
+
+            # grab the grade
+            gradeID = int(key.removeprefix("grade-"))
+            gradeLookup = request.POST[key]
+            grade = None if gradeLookup == "" else Decimal(gradeLookup).quantize(Decimal('.01'), rounding=ROUND_DOWN)
+
+            # get the submission from the db and set it
+            submission = models.Submission.get(id=gradeID)
+            submission.score = grade
+            updated_submissions.append(submission)
+
+        # save data
+        models.Submission.objects.bulk_update(updated_submissions, ["score"])
+
         return redirect(f"/{assignment_id}/submissions/")
     
     # get assignment based on id
