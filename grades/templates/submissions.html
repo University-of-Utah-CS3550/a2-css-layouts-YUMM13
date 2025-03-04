@@ -27,13 +27,21 @@
             <label for="grade-{{subs.id}}"><td>{{subs.author.get_full_name}}</td></label>
             <td><a href="{{subs.file}}" title="View Submission">Submission</a></td>
             <td>
-              <input type="number" name="grade-{{subs.id}}" value="{{subs.score}}"/>
+              <input 
+                type="number" 
+                name="grade-{{subs.id}}" 
+                value="{{subs.score}}"
+                min="0"
+                max={{assignment.weight}}
+                step="1"/>
             </td>
             <td>
               {% for e, msg in errors.items %}
-                Error: {{msg}}
+                {% if e|stringformat:"s" == subs.id|stringformat:"s" %}
+                <output>Error: {{msg}}</output>
+                {% endif %}
               {% endfor %}
-              </td>
+            </td>
             </tr>
             {% endfor %}
         </table>

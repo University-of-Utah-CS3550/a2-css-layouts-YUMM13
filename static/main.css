@@ -146,8 +146,13 @@ aside {
     margin: .5rem 0;
 }
 
-/* changes error outputs to be bold and red */
+/* HW4: changes error outputs to be bold and red */
 output {
     font-weight: bold;
     color: red;
+}
+
+/* HW4: for submission inputs */
+td input:invalid {
+    border: 2px solid red;
 }

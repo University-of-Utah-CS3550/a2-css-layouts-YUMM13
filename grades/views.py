@@ -70,7 +70,7 @@ def submissions(request, assignment_id):
                 submission = models.Submission.objects.get(id=gradeID)
                 gradeLookup = request.POST[key]
             except KeyError:
-                errors[str(gradeID) + " grade_lookup"] = "The submission ID does not exist for a grade given"
+                errors[str(gradeID)] = "The submission ID does not exist for a grade given"
                 continue
 
             try:
@@ -82,23 +82,23 @@ def submissions(request, assignment_id):
                 # check to see if the grade is in bounds
                 total = submission.assignment.weight
                 if grade < 0:
-                    errors[str(gradeID) + "_bounds"] = "Inputted grade is less than 0"
+                    errors[str(gradeID)] = "Inputted grade is less than 0"
                     continue
                 elif grade > total:
-                    errors[str(gradeID) + "_bounds"] = "Inputted grade is greater than assignment total"
+                    errors[str(gradeID)] = "Inputted grade is greater than assignment total"
                     continue
             except TypeError:
-                errors[str(gradeID) + "_grade_value"] = "Inputted grade is not a number"
+                errors[str(gradeID)] = "Inputted grade is not a number"
                 continue
             # get the submission from the db and set it
             submission.score = grade
             updated_submissions.append(submission)
 
         # save data
-        models.Submission.objects.bulk_update(updated_submissions, ["score"])
-        print(errors)
-
-        return redirect(f"/{assignment_id}/submissions/", errors)
+        if not errors:
+            models.Submission.objects.bulk_update(updated_submissions, ["score"])
+            print(errors)
+            return redirect(f"/{assignment_id}/submissions/")
     
     # get assignment based on id
     assignment = models.Assignment.objects.get(id=assignment_id)
@@ -114,4 +114,5 @@ def submissions(request, assignment_id):
         "userSubmissions": userSubmissions,
         "errors": errors,
     }
+    print(errors)
     return render(request, "submissions.html", values)
