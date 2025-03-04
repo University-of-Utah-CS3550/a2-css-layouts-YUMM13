@@ -54,6 +54,7 @@ def profile(request):
     return render(request, "profile.html", values)
 
 def submissions(request, assignment_id):
+    errors = {}
     # redirect for post requests
     if request.method == "POST":
         updated_submissions = []
@@ -61,21 +62,43 @@ def submissions(request, assignment_id):
             # skip if it is not a grade input
             if "grade-" not in key:
                 continue
-
             # grab the grade
             gradeID = int(key.removeprefix("grade-"))
-            gradeLookup = request.POST[key]
-            grade = None if gradeLookup == "" else Decimal(gradeLookup).quantize(Decimal('.01'), rounding=ROUND_DOWN)
+            
+            # check that grade is for a valid submission
+            try:
+                submission = models.Submission.objects.get(id=gradeID)
+                gradeLookup = request.POST[key]
+            except KeyError:
+                errors[str(gradeID) + " grade_lookup"] = "The submission ID does not exist for a grade given"
+                continue
 
+            try:
+                # make sure that inputted grade is a number
+                grade = None
+                if gradeLookup != "":
+                    grade = Decimal(gradeLookup).quantize(Decimal('.01'), rounding=ROUND_DOWN)
+
+                # check to see if the grade is in bounds
+                total = submission.assignment.weight
+                if grade < 0:
+                    errors[str(gradeID) + "_bounds"] = "Inputted grade is less than 0"
+                    continue
+                elif grade > total:
+                    errors[str(gradeID) + "_bounds"] = "Inputted grade is greater than assignment total"
+                    continue
+            except TypeError:
+                errors[str(gradeID) + "_grade_value"] = "Inputted grade is not a number"
+                continue
             # get the submission from the db and set it
-            submission = models.Submission.get(id=gradeID)
             submission.score = grade
             updated_submissions.append(submission)
 
         # save data
         models.Submission.objects.bulk_update(updated_submissions, ["score"])
+        print(errors)
 
-        return redirect(f"/{assignment_id}/submissions/")
+        return redirect(f"/{assignment_id}/submissions/", errors)
     
     # get assignment based on id
     assignment = models.Assignment.objects.get(id=assignment_id)
@@ -89,5 +112,6 @@ def submissions(request, assignment_id):
         "id": assignment_id,
         "assignment": assignment,
         "userSubmissions": userSubmissions,
+        "errors": errors,
     }
     return render(request, "submissions.html", values)

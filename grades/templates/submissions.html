@@ -12,10 +12,10 @@
 
     <!-- student submissions table -->
     <form method="post" action="/{{id}}/submissions/">
-      {% csrf_token %}
-      <div class="submissionsDiv">
-        <table>
-        <thead>
+    {% csrf_token %}
+    <div class="submissionsDiv">
+      <table>
+          <thead>
             <tr>
               <th>Student</th>
               <th>Submission</th>
@@ -24,13 +24,18 @@
           </thead>
           {% for subs in userSubmissions %}
           <tr>
-            <label for="grade-{{id}}"><td>{{subs.author.get_full_name}}</td></label>
+            <label for="grade-{{subs.id}}"><td>{{subs.author.get_full_name}}</td></label>
             <td><a href="{{subs.file}}" title="View Submission">Submission</a></td>
             <td>
-              <input type="number" id="grade-{{id}}" value="{{subs.score}}"/>
+              <input type="number" name="grade-{{subs.id}}" value="{{subs.score}}"/>
             </td>
-          </tr>
-          {% endfor %}
+            <td>
+              {% for e, msg in errors.items %}
+                Error: {{msg}}
+              {% endfor %}
+              </td>
+            </tr>
+            {% endfor %}
         </table>
         <div>
           <button id="submit">Submit</button>

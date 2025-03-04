@@ -145,3 +145,9 @@ aside {
     background-color: #ddd;
     margin: .5rem 0;
 }
+
+/* changes error outputs to be bold and red */
+output {
+    font-weight: bold;
+    color: red;
+}
