@@ -9,8 +9,26 @@
       <div class="horizonalLine"></div>
       Due {{assignment.deadline}}, total of {{assignment.points}} {% if assignment.points != 1 %}points{% else %}point{% endif %}
     </div>
+
+    <!-- Student submissions box -->
+    <aside>
+      {% if sub == "" %}
+      <p>No Current Submission</p>
+      {% else %}
+      <p>Current Submission: {{sub}}</p>
+      {% endif %}
+      <form method="post" action="/{{id}}/">
+        {% csrf_token %}
+        <label for="submission">Submit:</label>
+        <input
+          type="file" 
+          name="submission"
+          enctype="multipart/form-data"/>
+        <button>Submit</button>
+      </form>
+    </aside>
   
-    <!-- submissions box -->
+    <!-- TA submissions box -->
     <aside>
       <p>Currently {{totalSubmissions}}/{{totalStudents}} {% if totalStudents != 1 %}submissions{% else %}submission{% endif %}</p>
       <p>
