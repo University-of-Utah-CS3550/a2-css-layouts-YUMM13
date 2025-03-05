@@ -1,4 +1,5 @@
 from decimal import Decimal, ROUND_DOWN
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.db.models import Count, Q
 from . import models
@@ -85,6 +86,11 @@ def submissions(request, assignment_id):
         "errors": errors,
     }
     return render(request, "submissions.html", values)
+
+def show_upload(request, filename):
+    # look up file with filename
+    submission = models.Submission.objects.get(file=filename)
+    return HttpResponse(submission.file.open())
 
 def submissions_post_handler(request, assignment_id, errors):
     updated_submissions = []
