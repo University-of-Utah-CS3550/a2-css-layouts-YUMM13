@@ -17,13 +17,13 @@
       {% else %}
       <p>Current Submission: {{sub}}</p>
       {% endif %}
-      <form method="post" action="/{{id}}/">
+      <form method="post" action="/{{id}}/" enctype="multipart/form-data"/>
         {% csrf_token %}
         <label for="submission">Submit:</label>
         <input
           type="file" 
           name="submission"
-          enctype="multipart/form-data"/>
+          />
         <button>Submit</button>
       </form>
     </aside>

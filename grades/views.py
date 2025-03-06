@@ -140,8 +140,8 @@ def assignment_post_handler(request, assignment_id, errors):
     # get assignment
     assignment = models.Assignment.objects.get(id=assignment_id)
     # get submitted file
-    submitted_file = request.POST["submission"]
-    print(submitted_file)
+    submitted_file = request.FILES["submission"]
+    # print(request.FILES)
     # get Alice's submission if it exists, create it if it does not
     alice = models.User.objects.get(username="a")
     garry = models.User.objects.get(username="g")
