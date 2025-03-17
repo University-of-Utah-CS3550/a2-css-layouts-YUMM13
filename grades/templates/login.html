@@ -8,15 +8,16 @@
       <span class="pageTitle">Log in</span>
       <div class="horizonalLine"></div>
     </div>
-    <form>
+    <form method="post" action="/profile/login/">
+      {% csrf_token %}
       <div class="loginContainer">
         <div class="inputGroup">
           <label class="loginText" for="username" autofocus>Username: </label>
-          <input class="loginText" id="username" />
+          <input class="loginText" name="username" type="text"/>
         </div>
         <div class="inputGroup">
           <label class="loginText" for="password">Password: </label>
-          <input class="loginText" id="password" />
+          <input class="loginText" name="password" type="password"/>
         </div>
         <div class="loginButton">
           <button class="loginText">Log In</button>

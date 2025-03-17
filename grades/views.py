@@ -2,6 +2,7 @@ from decimal import Decimal, ROUND_DOWN
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.db.models import Count, Q
+from django.contrib.auth import authenticate, login, logout
 from . import models
 
 # Create your views here.
@@ -42,7 +43,22 @@ def assignment(request, assignment_id):
     return render(request, "assignment.html", values)
 
 def login_form(request):
+    if request.method == "POST":
+        # extracts username and password
+        username = request.POST.get("username", "")
+        password = request.POST.get("password", "")
+
+        # authenticates user, redirect if sucessful
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect("/profile/")
+    
     return render(request, "login.html")
+
+def logout_form(request):
+    logout(request)
+    return redirect("/profile/login/")
 
 def profile(request):
     # get all assignments
@@ -62,6 +78,7 @@ def profile(request):
         "assignments": assignments,
         "totalAssigned": totalAssigned,
         "totalGraded": totalGraded,
+        "user": request.user,
     }
     return render(request, "profile.html", values)
 
