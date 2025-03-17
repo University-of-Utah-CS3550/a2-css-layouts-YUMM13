@@ -20,7 +20,7 @@ def assignment(request, assignment_id):
     assignment = models.Assignment.objects.get(id=assignment_id)
 
     # get current user, as of HW3 it is just user g
-    currentUser = models.User.objects.get(username="g")
+    currentUser = request.user
 
     # get submission for alice
     alice = models.User.objects.get(username="a")
@@ -31,6 +31,8 @@ def assignment(request, assignment_id):
     totalSubmissions = assignment.submission_set.count()
     totalAssigned = currentUser.graded_set.filter(assignment=assignment).count()
     totalStudents = models.Group.objects.get(name="Students").user_set.count()
+    isStudent = is_student(currentUser) if currentUser.is_authenticated else True
+    isAdmin = currentUser.is_superuser
     values = {
         "id": assignment_id,
         "assignment": assignment,
@@ -39,6 +41,8 @@ def assignment(request, assignment_id):
         "totalStudents": totalStudents,
         "sub": file,
         "errors": errors,
+        "isStudent": isStudent,
+        "isAdmin": isAdmin,
     }
     return render(request, "assignment.html", values)
 
@@ -92,10 +96,14 @@ def submissions(request, assignment_id):
     assignment = models.Assignment.objects.get(id=assignment_id)
 
     # get current user, as of HW3 it is just user g
-    currentUser = models.User.objects.get(username="g")
+    currentUser = request.user
 
     # get all submissions for this specific assignment
-    userSubmissions = currentUser.graded_set.filter(assignment=assignment).order_by("author__username").all()
+    userSubmissions = None
+    if currentUser.is_superuser:
+        userSubmissions = models.Submission.objects.order_by("author__username").filter(assignment=assignment)
+    else:
+        userSubmissions = currentUser.graded_set.filter(assignment=assignment).order_by("author__username").all()
     values = {
         "id": assignment_id,
         "assignment": assignment,
@@ -177,3 +185,10 @@ def assignment_post_handler(request, assignment_id, errors):
         curr_submission.save()
     
     return redirect(f"/{assignment_id}/")
+
+def is_student(user):
+    return user.groups.filter(name="Students").exists()
+
+def is_ta(user):
+    return user.groups.filter(name="TA").exists()
+

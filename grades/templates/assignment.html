@@ -7,9 +7,10 @@
     <div>
       <span class="pageTitle">{{assignment.title}}</span>
       <div class="horizonalLine"></div>
-      Due {{assignment.deadline}}, total of {{assignment.points}} {% if assignment.points != 1 %}points{% else %}point{% endif %}
+      Due {{assignment.deadline}}, total of {{assignment.points}} point{{ assignment.points|pluralize }}
     </div>
 
+    {% if isStudent %}
     <!-- Student submissions box -->
     <aside>
       {% if sub == "" %}
@@ -27,18 +28,18 @@
         <button>Submit</button>
       </form>
     </aside>
-  
+    {% else %}
     <!-- TA submissions box -->
     <aside>
-      <p>Currently {{totalSubmissions}}/{{totalStudents}} {% if totalStudents != 1 %}submissions{% else %}submission{% endif %}</p>
-      <p>
-        {{totalAssigned}} {% if totalAssigned != 1 %}submissions{% else %}submission{% endif %} assigned to you <a href="/{{assignment.id}}/submissions">Grade</a>
-      </p>
+      <p>Currently {{totalSubmissions}}/{{totalStudents}} submission{{ totalStudents|pluralize }}</p>
+      {% if not isAdmin %}
+      <p>{{totalAssigned}} submission{{ totalAssigned|pluralize }} assigned to you <a href="/{{assignment.id}}/submissions">Grade</a></p>
+      {% endif %}
     </aside>
-  
+    {% endif %}
     <!-- description -->
     <h4>Description</h4>
-    {{assignment.description | safe}}
+    {{assignment.description|safe}}
     
     <img
     src="/static/assignments.png"
