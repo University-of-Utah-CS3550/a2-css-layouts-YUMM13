@@ -23,14 +23,30 @@
             <th class="tableNum">Graded</th>
           </tr>
         </thead>
-        {% for a in assignments %}
-        <tr>
-          <td>
-            <a href="/{{a.id}}/" title={{a.title}}>{{a.title}}</a>
-          </td>
-          <td class="tableNum">{{ totalGraded|get_value:a.title }}/{{ totalAssigned|get_value:a.title }}</td>
-        </tr>
-        {% endfor %}
+        <tbody>
+          {% for a in assignments %}
+          <tr>
+            <td>
+              <a href="/{{a.id}}/" title={{a.title}}>{{a.title}}</a>
+            </td>
+            <td class="tableNum">
+              {% if isStudent %}
+              {{ assignmentStatus|get_value:a.id }}
+              {% else %}
+              {{ totalGraded|get_value:a.title }}/{{ totalAssigned|get_value:a.title }}
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        {% if isStudent %}
+        <tfoot>
+          <tr>
+            <td>Final Grade</td>
+            <td>0%</td>
+          </tr>
+        </tfoot>
+        {% endif %}
     </table>
 </main>
 </div>

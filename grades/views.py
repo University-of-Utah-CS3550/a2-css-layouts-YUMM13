@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.db.models import Count, Q
 from django.contrib.auth import authenticate, login, logout
+from django.utils import timezone
 from . import models
 
 # Create your views here.
@@ -69,20 +70,54 @@ def profile(request):
     assignments = models.Assignment.objects.all()
 
     # get current user, as of HW3 it is just user g
-    currentUser = models.User.objects.get(username="g")
+    currentUser = request.user
+    isStudent = is_student(currentUser)
 
-    # get the submissions assigned to the current user, turn it into a dictionary
-    assigned = currentUser.graded_set.values("assignment__title").annotate(num_assigned=Count("id"))
-    totalAssigned = {item["assignment__title"]:item["num_assigned"] for item in assigned}
+    totalAssigned = None
+    totalGraded = None
+    assignment_status = {}
+    if currentUser.is_superuser:
+        # get all turned in assignments
+        assigned = models.Submission.objects.all().values("assignment__title").annotate(num_assigned=Count("id"))
+        totalAssigned = {item["assignment__title"]:item["num_assigned"] for item in assigned}
 
-    # get the submissions graded by the current user, turn it into a dictionary
-    graded = currentUser.graded_set.filter(score__isnull=False).values("assignment__title").annotate(num_graded=Count("id"))
-    totalGraded = {item["assignment__title"]:item["num_graded"] for item in graded}
+        # get all graded assignments
+        graded = models.Submission.objects.filter(score__isnull=False).values("assignment__title").annotate(num_graded=Count("id"))
+        totalGraded = {item["assignment__title"]:item["num_graded"] for item in graded}
+    elif isStudent:
+        # get status for each assignment
+        student_submissions_query = currentUser.submission_set.all().values("assignment__id", "score")
+        student_submissions = {sub["assignment__id"]:sub["score"] for sub in student_submissions_query}
+        print(student_submissions)
+        for a in assignments:
+            # status depends on whether the assignment has been submitted, whether it was due, and whether it has been graded yet
+            isSubmitted = a.id in student_submissions
+            isDue = a.deadline < timezone.now()
+            score = student_submissions.get(a.id)
+            isGraded = True if score else False
+            if isSubmitted and isGraded:
+                assignment_status[a.id] = str((score / a.points) * 100) + "%" # score / total as a percent
+            elif isSubmitted and not isGraded:
+                assignment_status[a.id] = "Not Graded"
+            elif not isSubmitted and not isDue:
+                assignment_status[a.id] = "Not Due"
+            elif not isSubmitted and isDue:
+                assignment_status[a.id] = "Missing"
+    else:
+        # get the submissions assigned to the current user, turn it into a dictionary
+        assigned = currentUser.graded_set.values("assignment__title").annotate(num_assigned=Count("id"))
+        totalAssigned = {item["assignment__title"]:item["num_assigned"] for item in assigned}
+
+        # get the submissions graded by the current user, turn it into a dictionary
+        graded = currentUser.graded_set.filter(score__isnull=False).values("assignment__title").annotate(num_graded=Count("id"))
+        totalGraded = {item["assignment__title"]:item["num_graded"] for item in graded}
     values = {
         "assignments": assignments,
         "totalAssigned": totalAssigned,
         "totalGraded": totalGraded,
-        "user": request.user,
+        "assignmentStatus": assignment_status,
+        "user": currentUser,
+        "isStudent": isStudent,
     }
     return render(request, "profile.html", values)
 
