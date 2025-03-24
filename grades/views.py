@@ -1,9 +1,10 @@
 from decimal import Decimal, ROUND_DOWN
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.db.models import Count, Q
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
+from django.contrib.auth.models import User
 from . import models
 
 # Create your views here.
@@ -24,9 +25,12 @@ def assignment(request, assignment_id):
     currentUser = request.user
 
     # get submission for alice
-    alice = models.User.objects.get(username="a")
-    files = models.Submission.objects.filter(assignment=assignment).filter(author=alice).values("file")
+    # alice = models.User.objects.get(username="a")
+    files = models.Submission.objects.filter(assignment=assignment).filter(author=currentUser).values("file")
     file = "" if not files else files[0]["file"]
+
+    # get the assignment status
+    status = get_assignment_status(currentUser, assignment)
 
     # get other needed fields
     totalSubmissions = assignment.submission_set.count()
@@ -44,6 +48,8 @@ def assignment(request, assignment_id):
         "errors": errors,
         "isStudent": isStudent,
         "isAdmin": isAdmin,
+        "status": status,
+        "ontime": assignment.deadline > timezone.now(),
     }
     return render(request, "assignment.html", values)
 
@@ -76,6 +82,8 @@ def profile(request):
     totalAssigned = None
     totalGraded = None
     assignment_status = {}
+
+    # changes dependent on user access
     if currentUser.is_superuser:
         # get all turned in assignments
         assigned = models.Submission.objects.all().values("assignment__title").annotate(num_assigned=Count("id"))
@@ -85,24 +93,7 @@ def profile(request):
         graded = models.Submission.objects.filter(score__isnull=False).values("assignment__title").annotate(num_graded=Count("id"))
         totalGraded = {item["assignment__title"]:item["num_graded"] for item in graded}
     elif isStudent:
-        # get status for each assignment
-        student_submissions_query = currentUser.submission_set.all().values("assignment__id", "score")
-        student_submissions = {sub["assignment__id"]:sub["score"] for sub in student_submissions_query}
-        print(student_submissions)
-        for a in assignments:
-            # status depends on whether the assignment has been submitted, whether it was due, and whether it has been graded yet
-            isSubmitted = a.id in student_submissions
-            isDue = a.deadline < timezone.now()
-            score = student_submissions.get(a.id)
-            isGraded = True if score else False
-            if isSubmitted and isGraded:
-                assignment_status[a.id] = str((score / a.points) * 100) + "%" # score / total as a percent
-            elif isSubmitted and not isGraded:
-                assignment_status[a.id] = "Not Graded"
-            elif not isSubmitted and not isDue:
-                assignment_status[a.id] = "Not Due"
-            elif not isSubmitted and isDue:
-                assignment_status[a.id] = "Missing"
+        assignment_status = get_grade_status(currentUser, assignments)
     else:
         # get the submissions assigned to the current user, turn it into a dictionary
         assigned = currentUser.graded_set.values("assignment__title").annotate(num_assigned=Count("id"))
@@ -111,6 +102,7 @@ def profile(request):
         # get the submissions graded by the current user, turn it into a dictionary
         graded = currentUser.graded_set.filter(score__isnull=False).values("assignment__title").annotate(num_graded=Count("id"))
         totalGraded = {item["assignment__title"]:item["num_graded"] for item in graded}
+
     values = {
         "assignments": assignments,
         "totalAssigned": totalAssigned,
@@ -199,22 +191,28 @@ def submissions_post_handler(request, assignment_id, errors):
 def assignment_post_handler(request, assignment_id, errors):
     # get assignment
     assignment = models.Assignment.objects.get(id=assignment_id)
+
+    # check that deadline has not passed
+    if assignment.deadline < timezone.now():
+        return HttpResponseBadRequest
+
     # get submitted file
     submitted_file = request.FILES["submission"]
+
     # get Alice's submission if it exists, create it if it does not
-    alice = models.User.objects.get(username="a")
-    garry = models.User.objects.get(username="g")
-    curr_submission, found = models.Submission.objects.filter(Q(author=alice)).get_or_create(
+    currentUser = request.user
+    # alice = models.User.objects.get(username="a")
+    # garry = models.User.objects.get(username="g")
+    curr_submission, found = models.Submission.objects.filter(Q(author=currentUser)).get_or_create(
         assignment=assignment,
-        author=alice,
+        author=currentUser,
         defaults={
-            "grader": garry,
+            "grader": pick_grader(assignment),
             "file": submitted_file,
             "score": None,
         }
     )
 
-    # does not appear to update the view
     if found:
         curr_submission.file = submitted_file
         curr_submission.save()
@@ -227,3 +225,60 @@ def is_student(user):
 def is_ta(user):
     return user.groups.filter(name="TA").exists()
 
+def get_grade_status(student: User, assignments: models.Assignment):
+    assignment_status = {}
+    totalPossibleScore = 0
+    totalAcquiredScore = 0
+
+    # get every submission for the current student
+    student_submissions_query = student.submission_set.all().values("assignment__id", "score")
+    student_submissions = {sub["assignment__id"]:sub["score"] for sub in student_submissions_query}
+    for a in assignments:
+        # status depends on whether the assignment has been submitted, whether it was due, and whether it has been graded yet
+        isSubmitted = a.id in student_submissions
+        isDue = a.deadline < timezone.now()
+        score = student_submissions.get(a.id)
+        isGraded = True if score else False
+        
+        # check for each status using the bools above
+        if isSubmitted and isGraded:
+            assignment_status[a.id] = str((score / a.points) * 100) + "%" # score / total as a percent
+            totalAcquiredScore = totalAcquiredScore + (score * a.weight)
+            totalPossibleScore = totalPossibleScore + (a.points * a.weight)
+        elif isSubmitted and not isGraded:
+            assignment_status[a.id] = "Not Graded"
+        elif not isSubmitted and not isDue:
+            assignment_status[a.id] = "Not Due"
+        elif not isSubmitted and isDue:
+            assignment_status[a.id] = "Missing"
+            totalPossibleScore = totalPossibleScore + (a.points * a.weight)
+    
+    # set the final score
+    assignment_status["final_grade"] = "100%" if totalPossibleScore == 0 else str("{:.1f}".format((totalAcquiredScore / totalPossibleScore) * 100)) + "%"
+
+    return assignment_status
+
+def get_assignment_status(student: User, assignment: models.Assignment):
+    # get the students submission, if it exists
+    submission = student.submission_set.filter(assignment=assignment).first() # done to return None if submission does not exist
+
+    # check if it was submitted, is due, and is graded
+    isSubmitted = True if submission else False
+    isDue = assignment.deadline < timezone.now()
+    score = submission.score if isSubmitted else None
+    isGraded = True if score else False
+
+    # check for each status using the bools above
+    if isSubmitted and isGraded:
+        return f"Your submission, {str(submission.file)}, received {int(score)}/{assignment.points} points ({str((score / assignment.points) * 100)}%)" # score / total as a percent
+    elif isSubmitted and not isGraded and isDue:
+        return f"Your submission, {str(submission.file)}, is being graded"
+    elif isSubmitted and not isDue:
+        return f"Your current submission is {str(submission.file)}"
+    elif not isSubmitted and not isDue:
+        return "No current submission"
+    elif not isSubmitted and isDue:
+        return "You did not submit this assignment and received 0 points"
+    
+def pick_grader(assignment: models.Assignment):
+    return models.Group.objects.get(name="Teaching Assistants").user_set.annotate(total_assigned=Count("graded_set")).order_by("total_assigned").first()

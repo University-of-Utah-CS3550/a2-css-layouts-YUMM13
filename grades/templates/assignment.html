@@ -13,11 +13,8 @@
     {% if isStudent %}
     <!-- Student submissions box -->
     <aside>
-      {% if sub == "" %}
-      <p>No Current Submission</p>
-      {% else %}
-      <p>Current Submission: {{sub}}</p>
-      {% endif %}
+      {{ status }}
+      {% if ontime %}
       <form method="post" action="/{{id}}/" enctype="multipart/form-data"/>
         {% csrf_token %}
         <label for="submission">Submit:</label>
@@ -27,14 +24,13 @@
           />
         <button>Submit</button>
       </form>
+      {% endif %}
     </aside>
     {% else %}
     <!-- TA submissions box -->
     <aside>
-      <p>Currently {{totalSubmissions}}/{{totalStudents}} submission{{ totalStudents|pluralize }}</p>
-      {% if not isAdmin %}
-      <p>{{totalAssigned}} submission{{ totalAssigned|pluralize }} assigned to you <a href="/{{assignment.id}}/submissions">Grade</a></p>
-      {% endif %}
+      <p>Currently {{totalSubmissions}}/{{totalStudents}} submission{{ totalStudents|pluralize }}</p>  
+      <p>{% if not isAdmin %}{{totalAssigned}} submission{{ totalAssigned|pluralize }} assigned to you {% endif %}<a href="/{{assignment.id}}/submissions">Grade</a></p>
     </aside>
     {% endif %}
     <!-- description -->

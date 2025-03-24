@@ -16,6 +16,10 @@ table {
     text-align: left;
 }
 
+tfoot {
+    font-weight: bold;
+}
+
 /* centers all elements */
 .Container {
     display: flex;
