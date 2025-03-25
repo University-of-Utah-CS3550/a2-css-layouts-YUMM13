@@ -12,7 +12,7 @@ def midnight(month, day):
         tz = datetime.timezone(datetime.timedelta(hours=-6), "MDT")
     else:
         tz = datetime.timezone(datetime.timedelta(hours=-7), "MST")
-    return datetime.datetime(2024, month, day, 11, 59, 59, 999999, tz)
+    return datetime.datetime(2026, month, day, 11, 59, 59, 999999, tz)
 
 def check_has_data():
     return Group.objects.all().count() or \

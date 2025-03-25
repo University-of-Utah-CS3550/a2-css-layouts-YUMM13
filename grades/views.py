@@ -31,7 +31,7 @@ def assignment(request, assignment_id):
 
     # get submission
     files = models.Submission.objects.filter(assignment=assignment).filter(author=currentUser).values()
-    file = files[0].get("file", "")
+    file = "" if not files else files[0]["file"]
 
     # get the assignment status
     status = get_assignment_status(currentUser, assignment)
@@ -323,7 +323,7 @@ def get_assignment_status(student: User, assignment: models.Assignment):
         return "You did not submit this assignment and received 0 points"
     
 def pick_grader(assignment: models.Assignment):
-    return models.Group.objects.get(name="Teaching Assistants").user_set.annotate(total_assigned=Count("graded_set")).order_by("total_assigned").first()
+    return models.Group.objects.get(name="Teaching Assistants").user_set.all().annotate(total_assigned=Count("graded_set")).order_by("total_assigned").first()
 
 def is_not_pdf(file):
-    return not file.endswith(".pdf") or not next(file.chunks()).startswith(b'%PDF-')
+    return not file.name.endswith(".pdf") or not next(file.chunks()).startswith(b'%PDF-')

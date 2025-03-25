@@ -13,17 +13,17 @@
     {% if isStudent %}
     <!-- Student submissions box -->
     <aside>
-      {% if errors %}
-      <output>
-        {% for n, e in errors.values %}
-          {{ e }}
-        {% endfor %}
-      </output>
-      {% endif %}
-      {{ status }}
+      <p>{{ status }}</p>
       {% if ontime %}
       <form method="post" action="/{{id}}/" enctype="multipart/form-data"/>
         {% csrf_token %}
+        {% if errors %}
+        <output>
+          {% for e, msg in errors.items %}
+            {{ msg }}
+          {% endfor %}
+        </output>
+        {% endif %}
         <label for="submission">Submit:</label>
         <input
           type="file" 
