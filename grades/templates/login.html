@@ -19,10 +19,12 @@
           <label class="loginText" for="password">Password: </label>
           <input class="loginText" name="password" type="password"/>
         </div>
+        <input type="hidden" name="next" value="{{next}}"/>
         <div class="loginButton">
           <button class="loginText">Log In</button>
         </div>
       </div>
     </form>
+    <output>{{error}}</output>
   </main>
 </div>

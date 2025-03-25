@@ -127,3 +127,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # used for file uploads
 MEDIA_ROOT = "uploads/"
 MEDIA_URL = "uploads/"
+
+# sets the url for logins
+LOGIN_URL = "/profile/login/"

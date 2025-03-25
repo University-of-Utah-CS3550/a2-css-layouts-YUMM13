@@ -4,15 +4,20 @@ from django.shortcuts import redirect, render
 from django.db.models import Count, Q
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from . import models
 
 # Create your views here.
+@login_required
 def index(request):
     assignments = models.Assignment.objects.all()
     values = { "assignments": assignments }
     return render(request, "index.html", values)
 
+@login_required
 def assignment(request, assignment_id):
     errors = {}
     if request.method == "POST":
@@ -54,7 +59,11 @@ def assignment(request, assignment_id):
     return render(request, "assignment.html", values)
 
 def login_form(request):
+    next = request.GET.get("next", "/profile/")
+
     if request.method == "POST":
+        next = request.POST.get("next", "/profile/")
+
         # extracts username and password
         username = request.POST.get("username", "")
         password = request.POST.get("password", "")
@@ -63,14 +72,21 @@ def login_form(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect("/profile/")
+            if url_has_allowed_host_and_scheme(next, None):
+                return redirect(next)
+            else:
+                return redirect("/")
+        else:
+            return render(request, "login.html", {"error": "Username and password do not match", "next": next })
     
-    return render(request, "login.html")
+
+    return render(request, "login.html", {"next": next})
 
 def logout_form(request):
     logout(request)
     return redirect("/profile/login/")
 
+@login_required
 def profile(request):
     # get all assignments
     assignments = models.Assignment.objects.all()
@@ -113,6 +129,7 @@ def profile(request):
     }
     return render(request, "profile.html", values)
 
+@login_required
 def submissions(request, assignment_id):
     errors = {}
     # redirect for post requests
@@ -139,12 +156,18 @@ def submissions(request, assignment_id):
     }
     return render(request, "submissions.html", values)
 
+@login_required
 def show_upload(request, filename):
     # look up file with filename
     submission = models.Submission.objects.get(file=filename)
     return HttpResponse(submission.file.open())
 
+@login_required
 def submissions_post_handler(request, assignment_id, errors):
+       # check to see if user is a student
+    if not is_ta(request.user):
+        raise PermissionDenied
+        
     updated_submissions = []
     for key in request.POST:
         # skip if it is not a grade input
@@ -179,15 +202,21 @@ def submissions_post_handler(request, assignment_id, errors):
             errors[str(gradeID)] = "Inputted grade is not a number"
             continue
         # get the submission from the db and set it
-        submission.score = grade
-        updated_submissions.append(submission)
+        def change_grade(user, grade):
+            if submission.grader != user:
+                raise PermissionDenied
+            submission.score = grade
+            updated_submissions.append(submission)
+            
+        change_grade(request.user, grade)
 
     # save data
     if not errors:
         models.Submission.objects.bulk_update(updated_submissions, ["score"])
         print(errors)
         return redirect(f"/{assignment_id}/submissions/")
-    
+
+@login_required  
 def assignment_post_handler(request, assignment_id, errors):
     # get assignment
     assignment = models.Assignment.objects.get(id=assignment_id)
@@ -223,7 +252,7 @@ def is_student(user):
     return user.groups.filter(name="Students").exists()
 
 def is_ta(user):
-    return user.groups.filter(name="TA").exists()
+    return user.groups.filter(name="Teaching Assistant").exists()
 
 def get_grade_status(student: User, assignments: models.Assignment):
     assignment_status = {}
