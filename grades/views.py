@@ -1,5 +1,5 @@
 from decimal import Decimal, ROUND_DOWN
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, Http404
 from django.shortcuts import redirect, render
 from django.db.models import Count, Q
 from django.contrib.auth import authenticate, login, logout
@@ -29,10 +29,9 @@ def assignment(request, assignment_id):
     # get current user, as of HW3 it is just user g
     currentUser = request.user
 
-    # get submission for alice
-    # alice = models.User.objects.get(username="a")
-    files = models.Submission.objects.filter(assignment=assignment).filter(author=currentUser).values("file")
-    file = "" if not files else files[0]["file"]
+    # get submission
+    files = models.Submission.objects.filter(assignment=assignment).filter(author=currentUser).values()
+    file = files[0].get("file", "")
 
     # get the assignment status
     status = get_assignment_status(currentUser, assignment)
@@ -55,6 +54,7 @@ def assignment(request, assignment_id):
         "isAdmin": isAdmin,
         "status": status,
         "ontime": assignment.deadline > timezone.now(),
+        "error": errors,
     }
     return render(request, "assignment.html", values)
 
@@ -160,11 +160,20 @@ def submissions(request, assignment_id):
 def show_upload(request, filename):
     # look up file with filename
     submission = models.Submission.objects.get(file=filename)
-    return HttpResponse(submission.file.open())
+    currentUser = request.user
+    file = submission.view_submission(currentUser)
+    
+    # test that file is a pdf
+    if is_not_pdf(file):
+        raise Http404
+
+    response = HttpResponse(file.open())
+    response["Content-Type"] = "application/pdf"
+    response["Content-Disposition"] = f"attachment; filename='{file}'"
 
 @login_required
 def submissions_post_handler(request, assignment_id, errors):
-       # check to see if user is a student
+    # check to see if user is a student
     if not is_ta(request.user):
         raise PermissionDenied
         
@@ -201,14 +210,10 @@ def submissions_post_handler(request, assignment_id, errors):
         except TypeError:
             errors[str(gradeID)] = "Inputted grade is not a number"
             continue
+        
         # get the submission from the db and set it
-        def change_grade(user, grade):
-            if submission.grader != user:
-                raise PermissionDenied
-            submission.score = grade
-            updated_submissions.append(submission)
-            
-        change_grade(request.user, grade)
+        submission.change_grade(request.user, grade)
+        updated_submissions.append(submission)
 
     # save data
     if not errors:
@@ -228,10 +233,18 @@ def assignment_post_handler(request, assignment_id, errors):
     # get submitted file
     submitted_file = request.FILES["submission"]
 
+    # test the file size, reject if too large
+    if submitted_file.size > (64 * 1024 * 1024):
+        errors["file_size"] = "File size exceeded 64 MiB"
+        return
+    
+    # test that file is a pdf
+    if is_not_pdf(submitted_file):
+        errors["file_type"] = "File type is not PDF"
+        return
+
     # get Alice's submission if it exists, create it if it does not
     currentUser = request.user
-    # alice = models.User.objects.get(username="a")
-    # garry = models.User.objects.get(username="g")
     curr_submission, found = models.Submission.objects.filter(Q(author=currentUser)).get_or_create(
         assignment=assignment,
         author=currentUser,
@@ -311,3 +324,6 @@ def get_assignment_status(student: User, assignment: models.Assignment):
     
 def pick_grader(assignment: models.Assignment):
     return models.Group.objects.get(name="Teaching Assistants").user_set.annotate(total_assigned=Count("graded_set")).order_by("total_assigned").first()
+
+def is_not_pdf(file):
+    return not file.endswith(".pdf") or not next(file.chunks()).startswith(b'%PDF-')

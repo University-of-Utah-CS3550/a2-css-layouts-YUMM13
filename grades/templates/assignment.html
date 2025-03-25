@@ -13,6 +13,13 @@
     {% if isStudent %}
     <!-- Student submissions box -->
     <aside>
+      {% if errors %}
+      <output>
+        {% for n, e in errors.values %}
+          {{ e }}
+        {% endfor %}
+      </output>
+      {% endif %}
       {{ status }}
       {% if ontime %}
       <form method="post" action="/{{id}}/" enctype="multipart/form-data"/>
