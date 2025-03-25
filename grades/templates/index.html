@@ -20,7 +20,7 @@
       {% for a in assignments %}
         <tr>
           <td><a href={{a.id}}>{{a.title}}</a></td>
-          <td>{{a.deadline}}</td>
+          <td>{{a.deadline|date:"M d"}}</td>
           <td class="tableNum">{{a.weight}}</td>
         </tr>
       {% endfor %}
