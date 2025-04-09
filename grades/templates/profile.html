@@ -29,7 +29,7 @@
             <td>
               <a href="/{{a.id}}/" title={{a.title}}>{{a.title}}</a>
             </td>
-            <td class="tableNum">
+            <td class="tableNum" data-index={{ forloop.counter }}>
               {% if isStudent %}
               {{ assignmentStatus|get_value:a.id }}
               {% else %}

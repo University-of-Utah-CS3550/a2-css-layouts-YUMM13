@@ -30,19 +30,7 @@ function make_table_sortable(table) {
 
             rows.forEach(row => body.appendChild(row));
         }            
-        else if (state.contains("sort-desc")) {
-            // make sort-asc
-            header.classList.replace("sort-desc" ,"sort-asc");
-            let body = table.querySelector("tbody");
-            let rows = Array.from(body.querySelectorAll("tr")).sort((a, b) => {
-                let aGrade = parseFloat(a.querySelector(".tableNum").textContent);
-                let bGrade = parseFloat(b.querySelector(".tableNum").textContent);
-                return aGrade - bGrade;
-            });
-
-            rows.forEach(row => body.appendChild(row));
-        }
-        else {
+        else if (state.contains("sort-asc")) {
             // make sort-desc
             header.classList.replace("sort-asc" ,"sort-desc");
             let body = table.querySelector("tbody");
@@ -51,7 +39,19 @@ function make_table_sortable(table) {
                 let bGrade = parseFloat(b.querySelector(".tableNum").textContent);
                 return bGrade - aGrade;
             });
-
+    
+            rows.forEach(row => body.appendChild(row));
+        }
+        else {
+            // restore original order
+            header.classList.replace("sort-desc" ,"sortable");
+            let body = table.querySelector("tbody");
+            let rows = Array.from(body.querySelectorAll("tr")).sort((a, b) => {
+                let aIndex = a.getAttribute("data-index");
+                let bIndex = b.getAttribute("data-index");
+                return aIndex - bIndex;
+            });
+    
             rows.forEach(row => body.appendChild(row));
         }
     })
