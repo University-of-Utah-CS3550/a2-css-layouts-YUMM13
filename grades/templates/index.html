@@ -9,19 +9,19 @@
     </div>
   
     <!-- Assignments table -->
-    <table>
+    <table class="sortable">
       <thead>
         <tr>
           <th>Assignment</th>
-          <th>Due Date</th>
-          <th class="tableNum">Weight</th>
+          <th class="sort-column">Due Date</th>
+          <th class="tableNum sort-column">Weight</th>
         </tr>
       </thead>
       {% for a in assignments %}
         <tr>
           <td><a href={{a.id}}>{{a.title}}</a></td>
-          <td>{{a.deadline|date:"M d"}}</td>
-          <td class="tableNum">{{a.weight}}</td>
+          <td data-value={{ a.deadline|date:"U" }}>{{a.deadline|date:"M d"}}</td>
+          <td data-value={{ a.deadline|date:"U" }} class="tableNum">{{a.weight}}</td>
         </tr>
       {% endfor %}
     </table>
