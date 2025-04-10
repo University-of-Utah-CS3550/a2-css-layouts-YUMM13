@@ -15,7 +15,7 @@
     <aside>
       <p>{{ status }}</p>
       {% if ontime %}
-      <form class="assignment-form" method="post" action="/{{id}}/" enctype="multipart/form-data"/>
+      <form class="assignment-form" method="post" action="/{{id}}/" enctype="multipart/form-data">
         {% csrf_token %}
         {% if errors %}
         <output>
@@ -34,7 +34,6 @@
       {% endif %}
     </aside>
     {% else %}
-
     <!-- TA submissions box -->
     <aside>
       <p>Currently {{totalSubmissions}}/{{totalStudents}} submission{{ totalStudents|pluralize }}</p>  

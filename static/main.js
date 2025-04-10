@@ -114,5 +114,4 @@ function make_form_async(form) {
 }
 
 const form = document.querySelector('.assignment-form');
-console.log(form);
 make_form_async(form);
