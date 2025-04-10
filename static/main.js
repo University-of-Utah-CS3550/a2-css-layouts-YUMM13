@@ -114,4 +114,51 @@ function make_form_async(form) {
 }
 
 const form = document.querySelector('.assignment-form');
-make_form_async(form);
+if (form){ make_form_async(form); }
+
+function make_grade_hypothesized(table) {
+    // create hypothesize button
+    let hypButton = document.createElement('button');
+    hypButton.innerText = "Hypothesize"
+    table.parentNode.insertBefore(hypButton, table);
+
+    // create click listener for button
+    hypButton.addEventListener('click', () => {
+        let classes = table.classList;
+
+        if (!classes.contains("hypothesized")) {
+            // change state
+            classes.add("hypothesized");
+            hypButton.innerText = "Actual Grades";
+
+            // swap grades with inputs
+            let grades = table.querySelectorAll(".tableNum");
+            console.log(grades);
+            grades.forEach(g => {
+                if (g.innerText === "Not Due" || g.innerText === "Not Graded") {
+                    let input = document.createElement("input");
+                    input.classList.add("tableNum");
+                    g.dataset.status = g.innerHTML;
+                    g.innerHTML = "";
+                    g.appendChild(input);
+                }
+            })
+        }
+        else {
+            // change state
+            classes.remove("hypothesized");
+            hypButton.innerText = "Hypothesized";
+
+            // swap inputs with grades
+            let inputs = table.querySelectorAll(".tableNum");
+            console.log(inputs);
+            inputs.forEach(i => {
+                g.style.display = "";
+                i.remove();
+            })
+        }
+    });
+}
+
+const table = document.querySelector(".hypoth");
+if (table) { make_grade_hypothesized(table); }
