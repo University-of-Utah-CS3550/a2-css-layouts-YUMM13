@@ -25,11 +25,11 @@
         </thead>
         <tbody>
           {% for a in assignments %}
-          <tr>
+          <tr data-index={{ forloop.counter }}>
             <td>
               <a href="/{{a.id}}/" title={{a.title}}>{{a.title}}</a>
             </td>
-            <td class="tableNum" data-index={{ forloop.counter }}>
+            <td class="tableNum" data-value={{ assignmentStatus|get_value:a.id }}>
               {% if isStudent %}
               {{ assignmentStatus|get_value:a.id }}
               {% else %}
