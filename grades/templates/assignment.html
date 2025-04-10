@@ -34,6 +34,50 @@
       {% endif %}
     </aside>
     {% else %}
+
+    <script>
+      function make_form_async(form) {
+        form.addEventListener("submit", async (event) => {
+          console.log("Running");
+          // remove default action
+          event.preventDefault();
+  
+          // construct form data instance
+          const formData = new FormData(form);
+  
+          // grab the csrf token
+          const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  
+          // try to send the form data
+          try {
+              const response = await fetch(form.action, {
+                  headers: {
+                    'X-CSRFToken': csrfToken,
+                  }
+                  method: "POST",
+                  body: formData,
+              });
+              if (response.ok) {
+                  console.log("Upload Succeeded!");
+                  let success = document.createElement("p");
+                  success.innerText = "Upload Succeeded!11";
+                  form.appendChild(success);
+              }
+              else {
+                console.log("Upload Failed")
+                let failed = document.createElement("p");
+                failed.innerText = "Upload Failed!11";
+                form.appendChild(failed);
+              }
+          } catch (e) {
+              console.log("An error ocurred while submitting your work: ", e);
+          }
+        });
+      }
+      const form = document.querySelector('form');
+      make_form_async(form);
+    </script>
+
     <!-- TA submissions box -->
     <aside>
       <p>Currently {{totalSubmissions}}/{{totalStudents}} submission{{ totalStudents|pluralize }}</p>  

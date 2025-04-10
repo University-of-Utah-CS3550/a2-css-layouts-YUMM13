@@ -62,3 +62,4 @@ const tables = document.querySelectorAll('table.sortable');
 tables.forEach(element => {
     make_table_sortable(element);
 });
+
