@@ -10,7 +10,7 @@ function make_table_sortable(table) {
 
     // get sortable headers
     let headers = table.querySelectorAll(".sort-column");
-    // console.log(headers);
+
     headers.forEach(header => {
         // add click handler to header
         header.addEventListener("click", (event) => {
@@ -64,7 +64,6 @@ function make_table_sortable(table) {
 function remove_other_sorts(table) {
     // get other headers with sort-asc or sort-desc
     let otherCols = table.querySelectorAll(".sort-asc,.sort-desc");
-    console.log(otherCols);
     otherCols.forEach(col => {
         if (col.classList.contains("sort-asc")) { col.classList.replace("sort-asc", "sort-column"); }
         if (col.classList.contains("sort-desc")) { col.classList.replace("sort-desc", "sort-column"); }
@@ -78,7 +77,6 @@ tables.forEach(element => {
 
 function make_form_async(form) {
     form.addEventListener("submit", async (event) => {
-        console.log("Running");
         // remove default action
         event.preventDefault();
 
@@ -131,8 +129,12 @@ function make_grade_hypothesized(table) {
             classes.add("hypothesized");
             hypButton.innerText = "Actual Grades";
 
+            // save original grade state
+            let finalGrade = table.querySelector("tfoot td.tableNum");
+            finalGrade.dataset.grade = finalGrade.innerHTML;
+
             // swap grades with inputs
-            let grades = table.querySelectorAll("td.tableNum");
+            let grades = table.querySelectorAll("tbody td.tableNum");
             grades.forEach(g => {
                 if (g.innerText === "Not Due" || g.innerText === "Not Graded") {
                     // remember state of grade
@@ -142,6 +144,40 @@ function make_grade_hypothesized(table) {
                     // replace with input
                     let input = document.createElement("input");
                     input.classList.add("tableNum");
+
+                    // add change event that calculates grade when it is changed
+                    input.addEventListener("keyup", () => {
+                        let totalPossibleScore = 0;
+                        let totalAcquiredScore = 0;
+
+                        // loop through grades and calculate final grade
+                        grades.forEach(g => {
+                            let points = parseFloat(g.dataset.points);
+                            let weight = parseFloat(g.dataset.weight);
+
+                            // if innerHTML is "Missing", then we should count the weight
+                            if (g.innerHTML === "Missing") {
+                                totalPossibleScore += (points * weight);
+                            }
+                            // if innerHTML is not blank, then the assignment is graded
+                            else if (g.innerHTML.includes("%")) {
+                                totalPossibleScore += (points * weight);
+                                totalAcquiredScore += ((parseFloat(g.innerHTML) / 100) * points) * weight;
+                            }
+                            // if innerHTML is blank, then it is an input
+                            else {
+                                let currInputValue = g.querySelector("input").value;
+                                if (currInputValue != "") {
+                                    totalPossibleScore += (points * weight);
+                                    totalAcquiredScore += (currInputValue * weight);
+                                }
+                            }
+                        });
+
+                        // update final grade
+                        finalGrade.innerHTML = `${((totalAcquiredScore / totalPossibleScore) * 100).toFixed(1)}%`;
+                    });
+
                     g.append(input);
                 }
             })
@@ -162,9 +198,13 @@ function make_grade_hypothesized(table) {
                     r.dataset.status = "";
                 }
             })
+
+            // reset final grade
+            let finalGrade = table.querySelector("tfoot td.tableNum");
+            finalGrade.innerHTML = finalGrade.dataset.grade;
         }
     });
 }
 
 const table = document.querySelector(".hypoth");
-if (table) { make_grade_hypothesized(table); }
+if (table && table.dataset.user === "True") { make_grade_hypothesized(table); }

@@ -16,7 +16,7 @@
       </aside>
     
       <!-- Graded assignmetns table -->
-      <table class="sortable hypoth">
+      <table class="sortable hypoth" data-user={{ isStudent }}>
         <thead>
           <tr>
             <th>Assignment</th>
@@ -29,7 +29,7 @@
             <td>
               <a href="/{{a.id}}/" title={{a.title}}>{{a.title}}</a>
             </td>
-            <td class="tableNum" data-value={{ assignmentStatus|get_value:a.id }}>
+            <td class="tableNum" data-value={{ assignmentStatus|get_value:a.id }} data-weight={{ a.weight }} data-points={{ a.points }}>
               {% if isStudent %}
               {{ assignmentStatus|get_value:a.id }}
               {% else %}
