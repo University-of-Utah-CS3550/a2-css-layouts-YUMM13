@@ -132,29 +132,35 @@ function make_grade_hypothesized(table) {
             hypButton.innerText = "Actual Grades";
 
             // swap grades with inputs
-            let grades = table.querySelectorAll(".tableNum");
-            console.log(grades);
+            let grades = table.querySelectorAll("td.tableNum");
             grades.forEach(g => {
                 if (g.innerText === "Not Due" || g.innerText === "Not Graded") {
-                    let input = document.createElement("input");
-                    input.classList.add("tableNum");
+                    // remember state of grade
                     g.dataset.status = g.innerHTML;
                     g.innerHTML = "";
-                    g.appendChild(input);
+
+                    // replace with input
+                    let input = document.createElement("input");
+                    input.classList.add("tableNum");
+                    g.append(input);
                 }
             })
         }
         else {
             // change state
             classes.remove("hypothesized");
-            hypButton.innerText = "Hypothesized";
+            hypButton.innerText = "Hypothesize";
 
             // swap inputs with grades
-            let inputs = table.querySelectorAll(".tableNum");
-            console.log(inputs);
-            inputs.forEach(i => {
-                g.style.display = "";
-                i.remove();
+            let rows = table.querySelectorAll("td.tableNum");
+            rows.forEach(r => {
+                // delete input if it is present and restore orginal status
+                let input = r.querySelector("input");
+                if (input) {
+                    input.remove();
+                    r.innerHTML = r.dataset.status;
+                    r.dataset.status = "";
+                }
             })
         }
     });
