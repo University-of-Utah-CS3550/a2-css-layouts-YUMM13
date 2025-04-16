@@ -7,6 +7,8 @@ from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.http import require_POST
 from django.core.exceptions import PermissionDenied
 from . import models
 
@@ -178,9 +180,11 @@ def show_upload(request, filename):
     response["Content-Disposition"] = f"attachment; filename='{file}'"
 
 @login_required
+@csrf_protect
+@require_POST
 def submissions_post_handler(request, assignment_id, errors):
     # check to see if user is a student
-    if not is_ta(request.user):
+    if is_student(request.user):
         raise PermissionDenied
         
     updated_submissions = []
@@ -269,9 +273,6 @@ def assignment_post_handler(request, assignment_id, errors):
 
 def is_student(user):
     return user.groups.filter(name="Students").exists()
-
-def is_ta(user):
-    return user.groups.filter(name="Teaching Assistant").exists()
 
 def get_grade_status(student: User, assignments: models.Assignment):
     assignment_status = {}

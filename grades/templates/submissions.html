@@ -25,7 +25,7 @@
           {% for subs in userSubmissions %}
           <tr>
             <label for="grade-{{subs.id}}"><td>{{subs.author.get_full_name}}</td></label>
-            <td><a href="/uploads/{{subs.file}}" title="View Submission">Submission</a></td>
+            <td><a href="/uploads/{{subs.file}}/" title="View Submission">Submission</a></td>
             <td>
               <input 
                 type="number" 
@@ -33,7 +33,7 @@
                 value="{{subs.score}}"
                 min="0"
                 max={{assignment.weight}}
-                step="1"/>
+                step="0.01"/>
             </td>
             <td>
               {% for e, msg in errors.items %}
