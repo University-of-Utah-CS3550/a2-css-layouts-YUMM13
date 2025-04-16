@@ -24,7 +24,10 @@ def assignment(request, assignment_id):
         assignment_post_handler(request, assignment_id, errors)
     
     # get assignment based on id
-    assignment = models.Assignment.objects.get(id=assignment_id)
+    try:
+        assignment = models.Assignment.objects.get(id=assignment_id)
+    except models.Assignment.DoesNotExist:
+        raise Http404("File does not exist")
 
     # get current user, as of HW3 it is just user g
     currentUser = request.user
@@ -137,7 +140,10 @@ def submissions(request, assignment_id):
         submissions_post_handler(request, assignment_id, errors)
     
     # get assignment based on id
-    assignment = models.Assignment.objects.get(id=assignment_id)
+    try:
+        assignment = models.Assignment.objects.get(id=assignment_id)
+    except models.Assignment.DoesNotExist:
+        raise Http404("File does not exist")
 
     # get current user, as of HW3 it is just user g
     currentUser = request.user
